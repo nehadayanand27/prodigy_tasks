@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stopwatch</title>
+    <!-- Materialize CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f5f5dc; /* Beige background color */
+      }
+      .stopwatch {
+        text-align: center;
+        padding: 40px;
+        border-radius: 15px;
+        background-color: white;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+      #time {
+        font-size: 64px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 30px;
+      }
+      .btn-large {
+        width: 100%;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stopwatch">
+      <div id="time">00:00:00</div>
+      <button class="btn-large blue" onclick="startStopwatch()">Start</button>
+      <button class="btn-large orange" onclick="stopStopwatch()">Pause</button>
+      <button class="btn-large red" onclick="resetStopwatch()">Reset</button>
+    </div>
+
+    <script>
+      let startTime, updatedTime, difference;
+      let tInterval,
+        running = false;
+      let savedTime = 0;
+
+      function startStopwatch() {
+        if (!running) {
+          startTime = new Date().getTime() - savedTime;
+          tInterval = setInterval(updateTime, 1000);
+          running = true;
+        }
+      }
+
+      function stopStopwatch() {
+        if (running) {
+          clearInterval(tInterval);
+          savedTime = difference;
+          running = false;
+        }
+      }
+
+      function resetStopwatch() {
+        clearInterval(tInterval);
+        savedTime = 0;
+        running = false;
+        document.getElementById("time").innerHTML = "00:00:00";
+      }
+
+      function updateTime() {
+        updatedTime = new Date().getTime();
+        difference = updatedTime - startTime;
+        let hours = Math.floor(
+          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        document.getElementById("time").innerHTML =
+          hours + ":" + minutes + ":" + seconds;
+      }
+    </script>
+    <!-- Materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </body>
+</html>
